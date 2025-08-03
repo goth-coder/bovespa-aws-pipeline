@@ -138,3 +138,8 @@ response.json
 # Logs
 *.log
 logs/
+
+
+
+# Ignore specific files
+uv.lock

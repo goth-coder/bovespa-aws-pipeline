@@ -1,0 +1,15 @@
+[project]
+name = "bovespa-aws-pipeline"
+version = "0.1.0"
+description = "Te amo, Adri! ❤️"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "bs4>=0.0.2",
+    "requests>=2.32.4",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.1",
+]
