@@ -1,4 +1,35 @@
-# 📌 Kanban de Progresso – Tech Challenge
+# 📌 Kanb#### 🔜 A FA#### 🟡 EM ANDAMENTO
+- [ ] Lambda para acionar Gl| Fase | Tarefa | Responsável | Status |
+|------|--------|-------------|--------|
+| Fase 1 | Arquitetura do pipeline | Victor + Adri | ✅ Concluído |
+| Fase 2 | Scraper B3 + Upload S3 | Victor | ✅ Concluído |
+| Fase 3 | Lambda trigger (job Glue) | Victor | 🔜 A fazer |
+| Fase 4 | ETL no Glue Studio | Victor | 🔜 A fazer |
+| Fase 5 | Validação Athena e partições | Adri | 🔜 A fazer |
+| Fase 6 | Visualização gráfica (Athena notebook) | Adri | 🔜 A fazer |
+| Fase 7 | README + vídeo final | Adri | 🔜 A fazer | [ ] Glue Job com transformações visuais (agrupamento, renomear colunas, cálculo com datas)
+
+#### ✅ CONCLUÍDO
+- ✅ [03/08] Estrutura inicial do repositório criada em colaboração com Adri
+- ✅ [03/08] Desenho da arquitetura AWS (com Adri)
+- ✅ [03/08] Estrutura modular de scraping implementada e testada
+- ✅ [03/08] Processador Parquet com estrutura particionada implementado
+- ✅ [03/08] Criação do bucket S3 com versionamento
+- ✅ [03/08] Testes do processador Parquet + estrutura S3-like
+- ✅ [04/08] Upload automático para S3 (integração boto3) - por Victor
+- ✅ [04/08] Testes completos do pipeline S3 na pasta tests/ - por Victor
+- ✅ [04/08] Relatórios de testes scraper e fluxo completo S3 - por Victormbda para acionar Glue Job
+- [ ] Glue Job com transformações visuais (agrupamento, renomear colunas, cálculo com datas)
+
+#### ✅ CONCLUÍDO
+- ✅ [03/08] Estrutura inicial do repositório criada em colaboração com Adri
+- ✅ [03/08] Desenho da arquitetura AWS (com Adri)
+- ✅ [03/08] Estrutura modular de scraping implementada e testada
+- ✅ [03/08] Processador Parquet com estrutura particionada implementado
+- ✅ [03/08] Criação do bucket S3 com versionamento
+- ✅ [03/08] Testes do processador Parquet + estrutura S3-like
+- ✅ [03/08] Upload automático para S3 (integração boto3) - por Victor
+- ✅ [03/08] Testes completos do pipeline S3 na pasta tests/ - por Victorso – Tech Challenge
 Projeto em dupla:
 - 🧑💻 Pessoa A – **Victor** (Back: scraping, AWS, Glue Job)
 - 👩💻 Pessoa B – **Adri** (Transformações, análises, docs, visualizações)
@@ -7,8 +38,8 @@ Projeto em dupla:
 ### 🔹Victor (Pessoa A)
 
 
-#### 🔜 A FAZER
-- [ ] Upload automático para S3 (boto3)
+#### � EM ANDAMENTO
+- 🟡 Criação de testes completos do pipeline S3 - por Victor
 - [ ] Lambda para acionar Glue Job
 - [ ] Glue Job com transformações visuais (agrupamento, renomear colunas, cálculo com datas)
 
@@ -65,6 +96,6 @@ Projeto em dupla:
 
 ---
 
-> Última atualização: 2025-08-03
+> Última atualização: 2025-08-04
 > Autores: Victor & Adri
 > Pós FIAP – Machine Learning Engineering

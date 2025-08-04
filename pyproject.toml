@@ -5,9 +5,11 @@ description = "Te amo, Adri! ❤️"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "boto3>=1.40.1",
     "bs4>=0.0.2",
     "pandas>=2.3.1",
     "pyarrow>=21.0.0",
+    "python-dotenv>=1.1.1",
     "requests>=2.32.4",
 ]
 
