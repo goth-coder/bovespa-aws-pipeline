@@ -48,6 +48,30 @@ coverage.xml
 
 # Translations
 *.mo
+
+# AWS específico
+*.pem
+*.key
+.aws/
+terraform.tfstate*
+terraform.tfvars
+.terraform/
+*.zip
+
+# Dados locais
+data/raw/*.json
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Logs
+logs/
+*.log
+
+# Configurações sensíveis
+config/secrets.yml
+.env
+.env.local
 *.pot
 
 # Django stuff:
@@ -138,3 +162,8 @@ response.json
 # Logs
 *.log
 logs/
+
+
+
+# Ignore specific files
+uv.lock

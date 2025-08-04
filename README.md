@@ -4,10 +4,37 @@
 Este projeto tem como objetivo construir um **pipeline de dados batch** para ingestão, processamento e análise dos dados do pregão da **B3**, utilizando serviços da **AWS** (S3, Glue, Lambda, Athena).  
 O pipeline será responsável por realizar o **scraping** dos dados da B3, armazenar em um **Data Lake** no formato **Parquet**, processar via **AWS Glue** e disponibilizar para consulta no **AWS Athena**.
 
-**Status:** 🚧 Em desenvolvimento
+**Status:** 🚧 Em desenvolvimento - Estrutura modular implementada
 
 ---
 
+## 🏗️ Estrutura do Projeto
+
+```
+bovespa-aws-pipeline/
+├── 📁 src/                          # Código fonte principal
+│   └── 📁 scraping/                 # Módulo de coleta de dados
+│       ├── scraping.py              # Script principal de scraping
+│       ├── config.py                # Configurações e URLs
+│       ├── utils.py                 # Funções auxiliares
+│       └── __init__.py              # Inicialização do módulo
+├── 📁 data/                         # Dados locais
+│   └── 📁 raw/                      # Dados brutos do scraping
+│       ├── b3_carteira_dia_setor.json
+│       ├── b3_carteira_dia_codigo.json
+│       ├── b3_carteira_teorica_mai_ago_2025.json
+│       ├── b3_previa_quadrimestral_set_dez_2025.json
+│       └── b3_dados_consolidados.json
+├── 📁 docs/                         # Documentação e controle
+│   ├── kanban_de_progresso.md       # Status das tarefas
+│   └── log_de_tarefas.md           # Log de atividades
+├── 📁 .github/                      # Configurações GitHub
+│   └── copilot-instructions.md      # Instruções para agentes
+├── test_modular.py                  # Script de teste da estrutura
+├── main.py                         # Script original (depreciado)
+├── requirements.txt                # Dependências Python
+└── README.md                       # Este arquivo
+```
 
 ---
 
@@ -24,7 +51,10 @@ O pipeline será responsável por realizar o **scraping** dos dados da B3, armaz
 ## 📋 Checklist do Projeto
 
 ### **Coleta de Dados**
-- [ ] Criar script de **scraping** para coletar dados do pregão da B3 (`https://sistemaswebb3-listados.b3.com.br/indexPage/day/IBOV?language=pt-br`)
+- [x] ✅ Criar script de **scraping** para coletar dados do pregão da B3
+- [x] ✅ Implementar **4 endpoints**: Carteira do Dia (setor/código), Carteira Teórica, Prévia Quadrimestral
+- [x] ✅ Estrutura modular com `src/scraping/`
+- [x] ✅ Coleta de ~339 ações por execução
 - [ ] Converter dados para **Parquet**
 - [ ] Adicionar **partição diária** ao salvar
 
