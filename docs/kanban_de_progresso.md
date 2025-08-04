@@ -10,8 +10,7 @@ Projeto em dupla:
 #### 🔜 A FAZER
 - [ ] Upload automático para S3 (boto3)
 - [ ] Lambda para acionar Glue Job
-- [ ] Glue Job com transformações visuais (agntegração com Athenarupamento, renomear colunas, cálculo com datas)
-- [ ] Glue Catalog + i
+- [ ] Glue Job com transformações visuais (agrupamento, renomear colunas, cálculo com datas)
 
 - 🟡 Upload automático para S3 (integração boto3)
 
@@ -30,6 +29,7 @@ Projeto em dupla:
 - [ ] Criar template do README.md com instruções e contexto
 - [ ] Estrutura de diretórios para documentação (`/docs`, `/diagrams`)
 - [ ] Validar tabelas no Athena
+- [ ] Glue Catalog + integração com Athena
 - [ ] Notebook de visualização no Athena (opcional)
 - [ ] Gravar vídeo de até 1min15 com overview da arquitetura
 - [ ] Documentar o projeto completo (em Markdown)
