@@ -5,34 +5,22 @@ Projeto em dupla:
 ---
 ## ✅ Status Geral por Responsável
 ### 🔹Victor (Pessoa A)
+
+
 #### 🔜 A FAZER
-- [ ] Scraper de dados da B3 (parquet + partição diária)
-- [ ] Criação do bucket S3 com versionamento
+- [ ] Upload automático para S3 (boto3)
 - [ ] Lambda para acionar Glue Job
-- [ ] Glue Job com transformações visuais (agrupamento, renomear colunas,
-cálculo com datas)
-- [ ] Glue Catalog + integração com Athena
+- [ ] Glue Job com transformações visuais (agntegração com Athenarupamento, renomear colunas, cálculo com datas)
+- [ ] Glue Catalog + i
 
-#### 🟡 EM ANDAMENTO
-- 🟡 Testes do processador Parquet + estrutura S3-like – por Victor
+- 🟡 Upload automático para S3 (integração boto3)
 
----
-### 📝 Resumo do commit (branch: fase-2)
-- Implementação do processador Parquet para dados B3
-- Estrutura de partição diária: data_lake/ano=YYYY/mes=MM/dia=DD/arquivo.parquet
-- Validação e limpeza dos dados extraídos
-- Conversão de formatos brasileiros (vírgula para ponto)
-- Otimização de tipos para Parquet (categorias, compressão snappy)
-- Geração automática da estrutura compatível com S3
-- Scripts de teste e demonstração criados
-- Dependências atualizadas: pandas, pyarrow, boto3
-- Pronto para integração com upload S3
-
-#### ✅ CONCLUÍDO
 - ✅ [03/08] Estrutura inicial do repositório criada em colaboração com Adri
 - ✅ [03/08] Desenho da arquitetura AWS (com Adri)
 - ✅ [03/08] Estrutura modular de scraping implementada e testada
 - ✅ [03/08] Processador Parquet com estrutura particionada implementado
+- ✅ [03/08] Criação do bucket S3 com versionamento
+- ✅ [03/08] Testes do processador Parquet + estrutura S3-like
 
 ---
 
@@ -45,8 +33,10 @@ cálculo com datas)
 - [ ] Notebook de visualização no Athena (opcional)
 - [ ] Gravar vídeo de até 1min15 com overview da arquitetura
 - [ ] Documentar o projeto completo (em Markdown)
-####🟡 EM ANDAMENTO
+
+#### 🟡 EM ANDAMENTO
 - 🟡 Planejamento da organização de tarefas no Kanban com Victor
+
 #### ✅ CONCLUÍDO
 - ✅ [03/08] Estruturação de `log_de_tarefas.md` e
 `kanban_de_progresso.md`
