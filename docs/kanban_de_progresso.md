@@ -14,12 +14,25 @@ cálculo com datas)
 - [ ] Glue Catalog + integração com Athena
 
 #### 🟡 EM ANDAMENTO
-- 🟡 Scraper de dados da B3 (parquet + partição diária)
+- 🟡 Testes do processador Parquet + estrutura S3-like – por Victor
+
+---
+### 📝 Resumo do commit (branch: fase-2)
+- Implementação do processador Parquet para dados B3
+- Estrutura de partição diária: data_lake/ano=YYYY/mes=MM/dia=DD/arquivo.parquet
+- Validação e limpeza dos dados extraídos
+- Conversão de formatos brasileiros (vírgula para ponto)
+- Otimização de tipos para Parquet (categorias, compressão snappy)
+- Geração automática da estrutura compatível com S3
+- Scripts de teste e demonstração criados
+- Dependências atualizadas: pandas, pyarrow, boto3
+- Pronto para integração com upload S3
 
 #### ✅ CONCLUÍDO
 - ✅ [03/08] Estrutura inicial do repositório criada em colaboração com Adri
 - ✅ [03/08] Desenho da arquitetura AWS (com Adri)
 - ✅ [03/08] Estrutura modular de scraping implementada e testada
+- ✅ [03/08] Processador Parquet com estrutura particionada implementado
 
 ---
 

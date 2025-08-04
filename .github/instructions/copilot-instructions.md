@@ -63,7 +63,7 @@ A atuação será feita em pares:
 
 ---
 
-> Autora: Adrianny Lelis  
+> Autores: Adrianny Lelis, Victor Santos
 > Pós-graduação FIAP – Machine Learning Engineering  
 > Projeto: Pipeline Batch Bovespa  
 > Modo: Desenvolvimento em Dupla
