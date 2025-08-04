@@ -1,0 +1,33 @@
+# Configurações AWS para o projeto Bovespa Pipeline
+
+aws:
+  region: "us-east-1"
+  profile: "default"
+  
+s3:
+  raw_bucket: "bovespa-raw-data-dev"
+  curated_bucket: "bovespa-curated-data-dev"
+  temp_bucket: "bovespa-temp-data-dev"
+  
+lambda:
+  function_name: "bovespa-scraping-dev"
+  timeout: 900
+  memory_size: 512
+  runtime: "python3.9"
+  
+glue:
+  database_name: "bovespa_dev"
+  job_name: "bovespa-etl-dev"
+  crawler_name: "bovespa-crawler-dev"
+  
+athena:
+  workgroup: "bovespa-workgroup"
+  output_location: "s3://bovespa-temp-data-dev/athena-results/"
+  
+eventbridge:
+  rule_name: "bovespa-daily-trigger"
+  schedule: "cron(0 9 * * ? *)"  # 9h UTC = 6h BRT
+  
+cloudwatch:
+  log_group: "/aws/lambda/bovespa-scraping-dev"
+  retention_days: 30

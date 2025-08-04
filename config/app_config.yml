@@ -1,0 +1,39 @@
+# Configurações da aplicação Bovespa Pipeline
+
+app:
+  name: "bovespa-pipeline"
+  version: "1.0.0"
+  environment: "dev"
+  
+scraping:
+  page_size: 120
+  timeout: 30
+  retry_attempts: 3
+  retry_delay: 5
+  
+endpoints:
+  b3_base_url: "https://sistemaswebb3-listados.b3.com.br"
+  rate_limit: 1  # requests per second
+  
+data:
+  formats:
+    input: "json"
+    output: "parquet"
+  partitioning:
+    - "year"
+    - "month" 
+    - "day"
+  compression: "snappy"
+  
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+monitoring:
+  enable_metrics: true
+  enable_alerts: true
+  slack_webhook: ""  # URL do webhook Slack para alertas
+  
+security:
+  encrypt_at_rest: true
+  encrypt_in_transit: true

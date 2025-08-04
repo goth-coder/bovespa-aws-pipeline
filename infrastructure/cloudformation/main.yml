@@ -1,0 +1,112 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template para Pipeline Bovespa B3'
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: 'bovespa-pipeline'
+    Description: 'Nome do projeto'
+  
+  Environment:
+    Type: String
+    Default: 'dev'
+    AllowedValues: ['dev', 'prod']
+    Description: 'Ambiente de deploy'
+
+Resources:
+  # S3 Buckets
+  RawDataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub '${ProjectName}-raw-data-${Environment}'
+      VersioningConfiguration:
+        Status: Enabled
+      LifecycleConfiguration:
+        Rules:
+          - Id: DeleteOldVersions
+            Status: Enabled
+            NoncurrentVersionExpirationInDays: 30
+  
+  CuratedDataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub '${ProjectName}-curated-data-${Environment}'
+      VersioningConfiguration:
+        Status: Enabled
+
+  # Lambda Function
+  ScrapingLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub '${ProjectName}-scraping-${Environment}'
+      Runtime: python3.9
+      Handler: trigger_scraping.lambda_handler
+      Code:
+        ZipFile: |
+          # Código será carregado via deploy
+          def lambda_handler(event, context):
+              return {'statusCode': 200}
+      Timeout: 900
+      MemorySize: 512
+
+  # EventBridge Rule
+  DailyTrigger:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: !Sub '${ProjectName}-daily-trigger-${Environment}'
+      Description: 'Trigger diário para scraping B3'
+      ScheduleExpression: 'cron(0 9 * * ? *)'  # 9h UTC (6h BRT)
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt ScrapingLambda.Arn
+          Id: 'ScrapingLambdaTarget'
+
+  # Glue Database
+  GlueDatabase:
+    Type: AWS::Glue::Database
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseInput:
+        Name: !Sub '${ProjectName}_${Environment}'
+        Description: 'Database para dados B3'
+
+  # Glue Job
+  ETLJob:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub '${ProjectName}-etl-${Environment}'
+      Role: !Ref GlueServiceRole
+      Command:
+        Name: glueetl
+        ScriptLocation: !Sub 's3://${RawDataBucket}/scripts/etl_job.py'
+        PythonVersion: '3'
+      DefaultArguments:
+        '--TempDir': !Sub 's3://${RawDataBucket}/temp/'
+        '--job-bookmark-option': 'job-bookmark-enable'
+
+  # IAM Roles (placeholders)
+  GlueServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: glue.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
+
+Outputs:
+  RawDataBucketName:
+    Description: 'Nome do bucket de dados raw'
+    Value: !Ref RawDataBucket
+    Export:
+      Name: !Sub '${ProjectName}-raw-bucket-${Environment}'
+  
+  CuratedDataBucketName:
+    Description: 'Nome do bucket de dados curated'
+    Value: !Ref CuratedDataBucket
+    Export:
+      Name: !Sub '${ProjectName}-curated-bucket-${Environment}'
