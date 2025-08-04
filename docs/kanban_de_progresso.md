@@ -5,21 +5,22 @@ Projeto em dupla:
 ---
 ## ✅ Status Geral por Responsável
 ### 🔹Victor (Pessoa A)
-#### 🔜 A FAZER
-- [ ] Scraper de dados da B3 (parquet + partição diária)
-- [ ] Criação do bucket S3 com versionamento
-- [ ] Lambda para acionar Glue Job
-- [ ] Glue Job com transformações visuais (agrupamento, renomear colunas,
-cálculo com datas)
-- [ ] Glue Catalog + integração com Athena
 
-#### 🟡 EM ANDAMENTO
-- 🟡 Scraper de dados da B3 (parquet + partição diária)
+
+#### 🔜 A FAZER
+- [ ] Upload automático para S3 (boto3)
+- [ ] Lambda para acionar Glue Job
+- [ ] Glue Job com transformações visuais (agrupamento, renomear colunas, cálculo com datas)
+
+- 🟡 Upload automático para S3 (integração boto3)
 
 #### ✅ CONCLUÍDO
-- ✅ Estrutura inicial do repositório criada em colaboração com Adri
-- ✅ Desenho da arquitetura AWS (com Adri)
-- ✅ Estrutura modular de scraping implementada e testada
+- ✅ [03/08] Estrutura inicial do repositório criada em colaboração com Adri
+- ✅ [03/08] Desenho da arquitetura AWS (com Adri)
+- ✅ [03/08] Estrutura modular de scraping implementada e testada
+- ✅ [03/08] Processador Parquet com estrutura particionada implementado
+- ✅ [03/08] Criação do bucket S3 com versionamento
+- ✅ [03/08] Testes do processador Parquet + estrutura S3-like
 
 ---
 
@@ -29,10 +30,12 @@ cálculo com datas)
 - [ ] Criar template do README.md com instruções e contexto
 - [ ] Estrutura de diretórios para documentação (`/docs`, `/diagrams`)
 - [ ] Validar tabelas no Athena
+- [ ] Glue Catalog + integração com Athena
 - [ ] Notebook de visualização no Athena (opcional)
 - [ ] Gravar vídeo de até 1min15 com overview da arquitetura
 - [ ] Documentar o projeto completo (em Markdown)
-####🟡 EM ANDAMENTO
+
+#### 🟡 EM ANDAMENTO
 - 🟡 Planejamento da organização de tarefas no Kanban com Victor
 
 #### ✅ CONCLUÍDO
