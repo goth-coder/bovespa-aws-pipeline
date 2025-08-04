@@ -17,9 +17,9 @@ cálculo com datas)
 - 🟡 Scraper de dados da B3 (parquet + partição diária)
 
 #### ✅ CONCLUÍDO
-- ✅ [03/08] Estrutura inicial do repositório criada em colaboração com Adri
-- ✅ [03/08] Desenho da arquitetura AWS (com Adri)
-- ✅ [03/08] Estrutura modular de scraping implementada e testada
+- ✅ Estrutura inicial do repositório criada em colaboração com Adri
+- ✅ Desenho da arquitetura AWS (com Adri)
+- ✅ Estrutura modular de scraping implementada e testada
 
 ---
 
@@ -34,10 +34,13 @@ cálculo com datas)
 - [ ] Documentar o projeto completo (em Markdown)
 ####🟡 EM ANDAMENTO
 - 🟡 Planejamento da organização de tarefas no Kanban com Victor
+
 #### ✅ CONCLUÍDO
-- ✅ [03/08] Estruturação de `log_de_tarefas.md` e
+- ✅ Estruturação de `log_de_tarefas.md` e
 `kanban_de_progresso.md`
-- ✅ [03/08] Diretórios criados: `/docs`, `/logs`, `/scripts`, `/lambda`
+- ✅ Diretórios criados: `/docs`, `/logs`, `/scripts`, `/lambda`
+- ✅ Diagrama de arquitetura AWS criado (`diagrama_arquitetura.drawio`) – por Adri
+- ✅ Remoção de referências temporais dos documentos – por Adri
 
 ---
 
@@ -62,6 +65,5 @@ cálculo com datas)
 
 ---
 
-> Última atualização: 2025-08-03
 > Autores: Victor & Adri
 > Pós FIAP – Machine Learning Engineering

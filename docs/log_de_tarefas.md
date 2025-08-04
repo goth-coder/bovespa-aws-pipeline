@@ -2,20 +2,19 @@ z'# 📝 Log de Tarefas - Pipeline Bovespa
 
 **Projeto:** Tech Challenge – Pipeline Batch Bovespa  
 **Modo:** Desenvolvimento em Dupla  
-**Data de Início:** 03/08/2025
 
 ---
 
-## 📅 **03/08/2025**
+## 📅 **Registro de Atividades**
 
-### 🕐 **18:00 - Início do Projeto**
+### 🕐 **Início do Projeto**
 - **Responsável:** Victor (Agente A)
 - **Tarefa:** Análise inicial do projeto
 - **Decisão:** Implementar scraping estruturado da B3
 - **Impacto:** Base sólida para o pipeline
 - **Status:** ✅ Concluído
 
-### 🕑 **18:10 - Implementação do Scraping**
+### 🕑 **Implementação do Scraping**
 - **Responsável:** Victor (Agente A)
 - **Tarefa:** Criação do script main.py para scraping
 - **Decisão:** Usar requests + parsing JSON com pageSize=120
@@ -137,3 +136,40 @@ z'# 📝 Log de Tarefas - Pipeline Bovespa
 
 **Responsável pelo Log:** Victor (Agente A)  
 **Próxima Atualização:** Após teste da estrutura modular
+
+---
+
+### 📊 **Criação do Diagrama de Arquitetura AWS**
+**Responsável:** Adri (Agente B)
+**Tarefa:** Geração do diagrama de arquitetura completa do pipeline Bovespa
+**Descrição:** Criado arquivo `diagrama_arquitetura.drawio` com visualização completa da arquitetura AWS, incluindo todos os componentes do pipeline desde ingestão até visualização
+**Decisões técnicas:** 
+- Formato Draw.io para compatibilidade e edição visual
+- Divisão em camadas: Ingestão, Processamento & Análise, Visualização
+- Cores diferenciadas por tipo de serviço (compute, storage, triggers, etc.)
+- Incluída legenda e especificações técnicas
+**Arquivos modificados:** 
+- `/docs/diagrama_arquitetura.drawio` (criado)
+- `/docs/kanban_de_progresso.md` (atualizado)
+**Impacto:** Documentação visual essencial para entendimento da arquitetura e referência durante desenvolvimento
+**Status:** ✅ Concluído
+**Próximos passos:** Validação da arquitetura com Victor e refinamento se necessário
+
+---
+
+### 🗓️ **Remoção de Referências Temporais**
+**Responsável:** Adri (Agente B)
+**Tarefa:** Remoção de todas as datas e timestamps dos documentos
+**Descrição:** Removidas todas as referências temporais específicas dos arquivos de documentação para torná-los atemporais
+**Decisões técnicas:** 
+- Manter conteúdo funcional sem marcação de data específica
+- Preservar ordem cronológica implícita das tarefas
+- Focar no conteúdo sem contexto temporal fixo
+**Arquivos modificados:** 
+- `/docs/kanban_de_progresso.md` (datas removidas)
+- `/docs/log_de_tarefas.md` (timestamps removidos)
+- `/docs/arquitetura_aws.md` (data removida)
+- `/docs/diagrama_arquitetura.drawio` (timestamp removido)
+**Impacto:** Documentação atemporal, mais flexível e focada no conteúdo
+**Status:** ✅ Concluído
+**Próximos passos:** Manter documentação atualizada sem referências temporais

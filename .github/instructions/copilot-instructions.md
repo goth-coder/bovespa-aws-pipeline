@@ -11,11 +11,25 @@ A atuação será feita em pares:
 
 ## ✅ Como devemos trabalhar
 
-1. **Ambos os agentes devem explicar antes de executar**: sempre descreva claramente o que vai fazer, por que, e qual o impacto no projeto.
-2. **Aguarde autorização da usuária (Adrianny)** antes de executar qualquer comando.
-3. **Colaborem via arquivos compartilhados**:
-   - Use `kanban_de_progresso.md` para indicar o status da tarefa e quem está responsável.
-   - Use `log_de_tarefas.md` para registrar o que foi feito, por quem, e quando.
+### 🚨 FLUXO OBRIGATÓRIO DE EXECUÇÃO:
+
+**ANTES DE QUALQUER IMPLEMENTAÇÃO:**
+1. **Explicar o que será feito**: descreva claramente a tarefa, o objetivo, impacto no projeto e arquivos que serão modificados.
+2. **Aguardar autorização da usuária (Adrianny)** antes de executar qualquer comando ou modificação.
+3. **Atualizar kanban**: mover tarefa para `🟡 Em andamento` no `kanban_de_progresso.md`.
+
+**DURANTE A IMPLEMENTAÇÃO:**
+4. **Executar a tarefa** seguindo as melhores práticas técnicas.
+5. **Registrar no log**: toda alteração DEVE ser documentada no `log_de_tarefas.md` com:
+   - esponsável, tarefa executada, decisões técnicas, impacto, status.
+
+**APÓS A IMPLEMENTAÇÃO:**
+6. **Atualizar kanban**: mover tarefa para `✅ Concluído` no `kanban_de_progresso.md`.
+7. **Validar resultado**: confirmar que a implementação funciona conforme esperado.
+
+### 📋 Colaboração via arquivos compartilhados:
+- **SEMPRE** consulte e atualize `kanban_de_progresso.md` para status das tarefas.
+- **SEMPRE** registre no `log_de_tarefas.md` cada implementação realizada.
 
 ---
 
@@ -33,24 +47,54 @@ A atuação será feita em pares:
 
 ---
 
-## 🔧 Convenções
+## 🔧 Convenções OBRIGATÓRIAS
 
-- **Antes de começar uma tarefa**, o agente deve escrever no `kanban_de_progresso.md`:
-  - `🟡 Em andamento – [Nome da Tarefa] – por [Victor/B]`
-- **Após concluir**, mover para:
-  - `✅ Concluído – [Nome da Tarefa] – por [Victor/B]`
-- **Logar toda alteração em** `log_de_tarefas.md`, com:
-  - Data, responsável, tarefa, decisão, impacto, status.
+### 📝 Gestão de Tarefas (SEMPRE seguir esta ordem):
+1. **Antes de iniciar**: 
+   - Consultar `kanban_de_progresso.md` para verificar dependências
+   - Mover tarefa para: `🟡 Em andamento – [Nome da Tarefa] – por [Victor/Adri]`
+
+2. **Durante execução**:
+   - Implementar seguindo padrões técnicos do projeto
+   - Documentar decisões técnicas em comentários no código
+
+3. **Após conclusão**:
+   - Registrar OBRIGATORIAMENTE no `log_de_tarefas.md`:
+     ```
+     **Responsável:** [Victor/Adri]
+     **Tarefa:** [Nome da tarefa]
+     **Descrição:** [O que foi implementado]
+     **Decisões técnicas:** [Justificativas das escolhas]
+     **Arquivos modificados:** [Lista de arquivos]
+     **Impacto:** [Como afeta o projeto]
+     **Status:** [Concluído/Pendente/Bloqueado]
+     **Próximos passos:** [O que vem depois]
+     ```
+   - Mover no kanban para: `✅ Concluído – [Nome da Tarefa] – por [Victor/Adri]`
+
+### 🔄 Sincronização:
+- **NUNCA** trabalhe em uma tarefa sem atualizar o kanban primeiro
+- **SEMPRE** consulte o log antes de iniciar uma nova tarefa
+- **OBRIGATÓRIO** registrar toda implementação no log, mesmo pequenas correções
 
 ---
 
-## 📜 Regras de ouro
+## 📜 Regras de ouro INEGOCIÁVEIS
 
-- Dividir para conquistar, mas revisar em conjunto.
-- Cada commit e push devem conter o nome do agente no comentário.
-- Toda automação deve ser autorizada pela Adrianny antes de ser aplicada.
-- Sempre escreva o *porquê técnico* da sua escolha.
-- Jamais sobrescreva arquivos do colega sem PR ou consentimento.
+1. **Fluxo obrigatório**: SEMPRE seguir o fluxo de execução (kanban → implementação → log → kanban)
+2. **Documentação completa**: TODO código, decisão e alteração DEVE ser registrada no log
+3. **Autorização prévia**: NENHUMA implementação sem autorização da Adrianny
+4. **Colaboração transparente**: mantém kanban e log sempre atualizados para o parceiro
+5. **Qualidade técnica**: sempre explicar o *porquê técnico* de cada escolha
+6. **Respeito ao trabalho do parceiro**: jamais sobrescrever sem consenso
+7. **Commits identificados**: todo commit deve conter o nome do agente responsável
+
+### 🚫 O que NÃO fazer:
+- Implementar sem seguir o fluxo kanban → log
+- Modificar arquivos sem registrar no log
+- Trabalhar em tarefa que está "Em andamento" por outro agente
+- Pular etapas do fluxo obrigatório
+- Fazer alterações sem explicar impacto técnico
 
 ---
 

@@ -77,5 +77,4 @@
 
 **Status**: ✅ **Fase 1 - Arquitetura Definida**  
 **Próximo**: Fase 2 - Implementação do Scraper B3  
-**Data**: 03/08/2025  
 **Responsável**: Victor + Adri
