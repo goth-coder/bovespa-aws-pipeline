@@ -11,25 +11,11 @@ A atuação será feita em pares:
 
 ## ✅ Como devemos trabalhar
 
-### 🚨 FLUXO OBRIGATÓRIO DE EXECUÇÃO:
-
-**ANTES DE QUALQUER IMPLEMENTAÇÃO:**
-1. **Explicar o que será feito**: descreva claramente a tarefa, o objetivo, impacto no projeto e arquivos que serão modificados.
-2. **Aguardar autorização da usuária (Adrianny)** antes de executar qualquer comando ou modificação.
-3. **Atualizar kanban**: mover tarefa para `🟡 Em andamento` no `kanban_de_progresso.md`.
-
-**DURANTE A IMPLEMENTAÇÃO:**
-4. **Executar a tarefa** seguindo as melhores práticas técnicas.
-5. **Registrar no log**: toda alteração DEVE ser documentada no `log_de_tarefas.md` com:
-   - esponsável, tarefa executada, decisões técnicas, impacto, status.
-
-**APÓS A IMPLEMENTAÇÃO:**
-6. **Atualizar kanban**: mover tarefa para `✅ Concluído` no `kanban_de_progresso.md`.
-7. **Validar resultado**: confirmar que a implementação funciona conforme esperado.
-
-### 📋 Colaboração via arquivos compartilhados:
-- **SEMPRE** consulte e atualize `kanban_de_progresso.md` para status das tarefas.
-- **SEMPRE** registre no `log_de_tarefas.md` cada implementação realizada.
+1. **Ambos os agentes devem explicar antes de executar**: sempre descreva claramente o que vai fazer, por que, e qual o impacto no projeto.
+2. **Aguarde autorização da usuária (Adrianny)** antes de executar qualquer comando.
+3. **Colaborem via arquivos compartilhados**:
+   - Use `kanban_de_progresso.md` para indicar o status da tarefa e quem está responsável.
+   - Use `log_de_tarefas.md` para registrar o que foi feito, por quem, e quando.
 
 ---
 
@@ -47,35 +33,14 @@ A atuação será feita em pares:
 
 ---
 
-## 🔧 Convenções OBRIGATÓRIAS
+## 🔧 Convenções
 
-### 📝 Gestão de Tarefas (SEMPRE seguir esta ordem):
-1. **Antes de iniciar**: 
-   - Consultar `kanban_de_progresso.md` para verificar dependências
-   - Mover tarefa para: `🟡 Em andamento – [Nome da Tarefa] – por [Victor/Adri]`
-
-2. **Durante execução**:
-   - Implementar seguindo padrões técnicos do projeto
-   - Documentar decisões técnicas em comentários no código
-
-3. **Após conclusão**:
-   - Registrar OBRIGATORIAMENTE no `log_de_tarefas.md`:
-     ```
-     **Responsável:** [Victor/Adri]
-     **Tarefa:** [Nome da tarefa]
-     **Descrição:** [O que foi implementado]
-     **Decisões técnicas:** [Justificativas das escolhas]
-     **Arquivos modificados:** [Lista de arquivos]
-     **Impacto:** [Como afeta o projeto]
-     **Status:** [Concluído/Pendente/Bloqueado]
-     **Próximos passos:** [O que vem depois]
-     ```
-   - Mover no kanban para: `✅ Concluído – [Nome da Tarefa] – por [Victor/Adri]`
-
-### 🔄 Sincronização:
-- **NUNCA** trabalhe em uma tarefa sem atualizar o kanban primeiro
-- **SEMPRE** consulte o log antes de iniciar uma nova tarefa
-- **OBRIGATÓRIO** registrar toda implementação no log, mesmo pequenas correções
+- **Antes de começar uma tarefa**, o agente deve escrever no `kanban_de_progresso.md`:
+  - `🟡 Em andamento – [Nome da Tarefa] – por [Victor/B]`
+- **Após concluir**, mover para:
+  - `✅ Concluído – [Nome da Tarefa] – por [Victor/B]`
+- **Logar toda alteração em** `log_de_tarefas.md`, com:
+  - Data, responsável, tarefa, decisão, impacto, status.
 
 ---
 
@@ -107,7 +72,7 @@ A atuação será feita em pares:
 
 ---
 
-> Autora: Adrianny Lelis  
+> Autores: Adrianny Lelis e Victor Santos
 > Pós-graduação FIAP – Machine Learning Engineering  
 > Projeto: Pipeline Batch Bovespa  
 > Modo: Desenvolvimento em Dupla

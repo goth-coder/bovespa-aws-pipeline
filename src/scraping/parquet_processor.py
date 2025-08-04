@@ -13,6 +13,13 @@ import pyarrow.parquet as pq
 from datetime import datetime, date
 from typing import Dict, Optional, Tuple
 from pathlib import Path
+import boto3
+import os
+from dotenv import load_dotenv
+from botocore.exceptions import ClientError
+
+# Carregar variáveis de ambiente do .env
+load_dotenv()
 
 try:
     from .config import setup_logger
@@ -30,23 +37,116 @@ class B3ParquetProcessor:
     com estrutura de particionamento compatível com S3.
     """
     
-    def __init__(self, input_path: str = "data/raw", output_path: str = "data_lake"):
+    def __init__(self, input_path: str = "data/raw", output_path: str = "data_lake", upload_to_s3: bool = True):
         """
         Inicializa o processador de Parquet.
         
         Args:
             input_path (str): Diretório com arquivos JSON de entrada
             output_path (str): Diretório base para estrutura particionada
+            upload_to_s3 (bool): Se deve fazer upload automático para S3
         """
         self.input_path = Path(input_path)
         self.output_path = Path(output_path)
         self.processed_files = []
+        self.upload_to_s3 = upload_to_s3
+        
+        # Configurar S3 se habilitado
+        if self.upload_to_s3:
+            self.s3_bucket = os.getenv('BOVESPA_S3_BUCKET', 'bovespa-pipeline-data-adri-vic')
+            try:
+                self.s3_client = boto3.client('s3')
+                logger.info(f"✅ Upload S3 habilitado para bucket: {self.s3_bucket}")
+            except Exception as e:
+                logger.warning(f"⚠️ Erro ao configurar S3: {e}. Upload desabilitado.")
+                self.upload_to_s3 = False
         
         logger.info("B3ParquetProcessor inicializado")
         logger.info(f"Input: {self.input_path}")
         logger.info(f"Output: {self.output_path}")
     
-    def validate_stock_data(self, df: pd.DataFrame) -> Tuple[pd.DataFrame, Dict]:
+    def upload_file_to_s3(self, local_file_path: Path, s3_key: str) -> bool:
+        """
+        Faz upload de arquivo para S3.
+        
+        Args:
+            local_file_path (Path): Caminho local do arquivo
+            s3_key (str): Chave do arquivo no S3
+            
+        Returns:
+            bool: True se upload foi bem-sucedido, False caso contrário
+        """
+        if not self.upload_to_s3:
+            logger.info("🔄 Upload S3 desabilitado, pulando...")
+            return False
+            
+        try:
+            # Verificar se arquivo existe
+            if not local_file_path.exists():
+                logger.error(f"❌ Arquivo não encontrado: {local_file_path}")
+                return False
+            
+            # Obter tamanho do arquivo para log
+            file_size = local_file_path.stat().st_size / (1024 * 1024)  # MB
+            
+            logger.info(f"📤 Fazendo upload: {local_file_path.name} ({file_size:.2f} MB)")
+            logger.info(f"🎯 Destino S3: s3://{self.s3_bucket}/{s3_key}")
+            
+            # Upload para S3
+            self.s3_client.upload_file(
+                str(local_file_path),
+                self.s3_bucket,
+                s3_key,
+                ExtraArgs={
+                    'ServerSideEncryption': 'AES256',
+                    'StorageClass': 'STANDARD'
+                }
+            )
+            
+            logger.info(f"✅ Upload concluído: s3://{self.s3_bucket}/{s3_key}")
+            return True
+            
+        except ClientError as e:
+            error_code = e.response['Error']['Code']
+            logger.error(f"❌ Erro AWS S3 ({error_code}): {e}")
+            return False
+        except Exception as e:
+            logger.error(f"❌ Erro inesperado no upload: {e}")
+            return False
+    
+    def validate_stock_data(self, data: Dict) -> bool:
+        """
+        Valida estrutura básica dos dados de ações.
+        
+        Args:
+            data (Dict): Dados JSON para validação
+            
+        Returns:
+            bool: True se dados são válidos, False caso contrário
+        """
+        if not isinstance(data, dict):
+            logger.error("❌ Dados não são um dicionário válido")
+            return False
+        
+        # Verificar se há dados de ações
+        stocks_data = data.get('stocks_data', data.get('combined_stocks', []))
+        
+        if not stocks_data:
+            logger.warning("⚠️ Nenhum dado de ação encontrado")
+            return False
+            
+        if not isinstance(stocks_data, list):
+            logger.error("❌ stocks_data deve ser uma lista")
+            return False
+            
+        if len(stocks_data) == 0:
+            logger.warning("⚠️ Lista de ações está vazia")
+            return False
+            
+        logger.info(f"✅ Dados válidos: {len(stocks_data)} registros encontrados")
+        return True
+    
+    def clean_and_validate_dataframe(self, df: pd.DataFrame) -> Tuple[pd.DataFrame, Dict]:
         """
         Valida e limpa dados de ações.
         
@@ -307,7 +407,12 @@ class B3ParquetProcessor:
             with open(json_file, 'r', encoding='utf-8') as f:
                 data = json.load(f)
             
-            # 2. Extrair dados de ações (tentar ambos os formatos)
+            # 2. Validar estrutura JSON primeiro
+            if not self.validate_stock_data(data):
+                logger.warning(f"Dados inválidos em {json_file.name}")
+                return None
+            
+            # 3. Extrair dados de ações (tentar ambos os formatos)
             stocks_data = data.get('combined_stocks', [])
             if not stocks_data:
                 stocks_data = data.get('stocks_data', [])
@@ -316,16 +421,16 @@ class B3ParquetProcessor:
                 logger.warning(f"Nenhum dado de ação encontrado em {json_file.name}")
                 return None
             
-            # 3. Converter para DataFrame
+            # 4. Converter para DataFrame
             df = pd.DataFrame(stocks_data)
             
-            # 4. Validar e limpar dados
-            df_clean, validation_report = self.validate_stock_data(df)
+            # 5. Validar e limpar dados do DataFrame
+            df_clean, validation_report = self.clean_and_validate_dataframe(df)
             
-            # 5. Adicionar metadados
+            # 6. Adicionar metadados
             df_final = self.add_processing_metadata(df_clean, json_file.name)
             
-            # 6. Definir nome do arquivo Parquet baseado no tipo de dados
+            # 7. Definir nome do arquivo Parquet baseado no tipo de dados
             if 'consolidados' in json_file.name.lower():
                 parquet_filename = f"ibov_consolidado_{target_date.strftime('%Y%m%d')}.parquet"
             elif 'carteira_dia_codigo' in json_file.name.lower():
@@ -341,18 +446,27 @@ class B3ParquetProcessor:
                 base_name = json_file.stem.replace('b3_', '').replace('_', '-')
                 parquet_filename = f"ibov_{base_name}_{target_date.strftime('%Y%m%d')}.parquet"
             
-            # 7. Criar caminho particionado
+            # 8. Criar caminho particionado
             parquet_path = self.create_partition_path(target_date, parquet_filename)
             
-            # 8. Salvar arquivo Parquet
+            # 9. Salvar arquivo Parquet
             success = self.save_to_parquet(df_final, parquet_path)
             
             if success:
+                # 10. Upload para S3 (se habilitado)
+                s3_upload_success = False
+                if self.upload_to_s3:
+                    # Definir chave S3 mantendo estrutura particionada
+                    s3_key = f"data_lake/ano={target_date.year}/mes={target_date.month:02d}/dia={target_date.day:02d}/{parquet_filename}"
+                    s3_upload_success = self.upload_file_to_s3(parquet_path, s3_key)
+                
                 self.processed_files.append({
                     'source': str(json_file),
                     'output': str(parquet_path),
                     'records': len(df_final),
-                    'validation_report': validation_report
+                    'validation_report': validation_report,
+                    's3_uploaded': s3_upload_success,
+                    's3_key': s3_key if self.upload_to_s3 else None
                 })
                 
                 return {
@@ -360,7 +474,9 @@ class B3ParquetProcessor:
                     'output_file': str(parquet_path),
                     'records_processed': len(df_final),
                     'validation_report': validation_report,
-                    'file_size_mb': parquet_path.stat().st_size / 1024 / 1024
+                    'file_size_mb': parquet_path.stat().st_size / 1024 / 1024,
+                    's3_uploaded': s3_upload_success,
+                    's3_key': s3_key if self.upload_to_s3 else None
                 }
             
             return None
