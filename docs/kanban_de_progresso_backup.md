@@ -1,7 +1,11 @@
-# 📌 Kanban de Progresso – Tech Challenge
+# 📌 Kanban de P| Fase 3 | Lambda trigger (job Glue) | Victor | ✅ Concluído |ogress#### 🟡 EM ANDAMENTO
+- 🟡 Glue Job com transformações visuais (código base criado, pendente deploy)
+
+#### ✅ CONCLUÍDO RECENTEMENTE
+- ✅ [04/08] Lambda function para trigger do Glue Job (integração completa + 12 testes funcionais) - por Victor via Adri Tech Challenge
 Projeto em dupla:
-- 🧑‍💻 Pessoa A – **Victor** (Back: scraping, AWS, Glue Job)
-- 👩‍💻 Pessoa B – **Adri** (Transformações, análises, docs, visualizações)
+- 🧑� Pessoa A – **Victor** (Back: scraping, AWS, Glue Job)
+- 👩💻 Pessoa B – **Adri** (Transformações, análises, docs, visualizações)
 
 ---
 
@@ -10,9 +14,9 @@ Projeto em dupla:
 |------|--------|-------------|--------|
 | Fase 1 | Arquitetura do pipeline | Victor + Adri | ✅ Concluído |
 | Fase 2 | Scraper B3 + Upload S3 | Victor | ✅ Concluído |
-| Fase 3 | Lambda trigger (job Glue) | Victor | ✅ Concluído |
-| Fase 4 | ETL no Glue Studio | Victor | 🟡 Em andamento |
-| Fase 5 | Validação Athena e partições | Adri | 🟡 Em andamento |
+| Fase 3 | Lambda trigger (job Glue) | Victor | � Em andamento |
+| Fase 4 | ETL no Glue Studio | Victor | � Em andamento |
+| Fase 5 | Validação Athena e partições | Adri | � Em andamento |
 | Fase 6 | Visualização gráfica (Athena notebook) | Adri | 🔜 A fazer |
 | Fase 7 | README + vídeo final | Adri | 🔜 A fazer |
 
@@ -22,10 +26,8 @@ Projeto em dupla:
 ### 🔹Victor (Pessoa A)
 
 #### 🟡 EM ANDAMENTO
+- 🟡 Lambda function para trigger do Glue Job (✅ integração scraping implementada, � implementando testes funcionais - Adri)
 - 🟡 Glue Job com transformações visuais (código base criado, pendente deploy)
-
-#### ✅ CONCLUÍDO RECENTEMENTE
-- ✅ [04/08] Lambda function para trigger do Glue Job (integração completa + 12 testes funcionais) - por Victor via Adri
 
 #### ✅ CONCLUÍDO
 - ✅ [03/08] Estrutura inicial do repositório criada em colaboração com Adri
@@ -43,7 +45,7 @@ Projeto em dupla:
 ---
 
 ### 🔹 Adri (Pessoa B)
-#### 🟡 EM ANDAMENTO
+#### � EM ANDAMENTO
 - 🟡 Queries Athena para análise de dados (estrutura criada, pendente validação)
 
 #### 🔜 A FAZER
@@ -60,47 +62,41 @@ Projeto em dupla:
 - ✅ Remoção de referências temporais dos documentos – por Adri
 - ✅ [04/08] Estrutura base de queries Athena criada (queries/, views/) - por Adri
 - ✅ [04/08] Documentação de arquitetura AWS completa - por Adri
-- ✅ [04/08] Implementação e testes da Lambda function (12 testes funcionais) - por Adri executando tarefa Victor
-- ✅ [04/08] Teste local da Lambda: 339 ações coletadas + processamento Parquet + validação S3 - por Adri
 
 ---
 
 ## 📊 Componentes Implementados vs Pendentes
 
 ### ✅ **TOTALMENTE IMPLEMENTADO**
-- **Scraping B3**: 4 endpoints funcionais (carteira dia, teórica, prévia) - 339 ações coletadas
+- **Scraping B3**: 4 endpoints funcionais (carteira dia, teórica, prévia)
 - **Processamento Parquet**: Conversão JSON → Parquet com particionamento
 - **Upload S3**: Bucket criado, estrutura particionada data_lake/ano=/mes=/dia=
-- **Lambda Function**: Handler completo com integração scraping + parquet + S3 + trigger Glue
-- **Testes**: Suite completa para scraping, S3 pipeline e Lambda (12 testes funcionais)
+- **Testes**: Suite completa para scraping e S3 pipeline
 - **Documentação**: Logs, relatórios técnicos, arquitetura
 
 ### 🟡 **PARCIALMENTE IMPLEMENTADO**
+- **Lambda Function**: Estrutura criada, funções básicas implementadas (trigger_scraping.py)
 - **Glue ETL**: Código base criado com transformações PySpark (etl_job.py, transformations.py)
 - **Athena Queries**: Templates de queries criados, pendente validação com dados reais
 
 ### 🔜 **PENDENTE**
 - **Deploy da infraestrutura AWS**: CloudFormation/Terraform
 - **Glue Catalog**: Configuração de tabelas e schema discovery
-- **Integração completa**: Deploy Lambda → Glue → Athena na AWS
+- **Integração completa**: Trigger automático Lambda → Glue → Athena
 - **Visualizações**: Dashboard ou notebook interativo
 
 ---
 
-## 🎯 Progresso Atual - Resumo Executivo
-
-### ✅ **FASES CONCLUÍDAS (3/7)**
-- **Fase 1**: ✅ Arquitetura e planejamento
-- **Fase 2**: ✅ Scraping B3 + Upload S3 (Victor)
-- **Fase 3**: ✅ Lambda trigger (Victor via Adri)
-
-### 🟡 **FASES EM ANDAMENTO (2/7)**
-- **Fase 4**: 🟡 ETL Glue Studio (Victor) - código base existe
-- **Fase 5**: 🟡 Athena + Glue Catalog (Adri) - queries criadas
-
-### 🔜 **PRÓXIMAS FASES (2/7)**
-- **Fase 6**: 🔜 Visualização (Adri)
-- **Fase 7**: 🔜 README + vídeo (Adri)
+## 📆 Etapas por Fase (Visão Linear)
+| Fase | Tarefa | Responsável | Status |
+|------|--------|-------------|--------|
+| Fase 1 | Arquitetura do pipeline | Victor + Adri | ✅ Concluído |
+| Fase 2 | Scraper B3 + Upload S3 | Victor | ✅ Concluído |
+| Fase 3 | Lambda trigger (job Glue) | Victor | � Em andamento |
+| Fase 4 | ETL no Glue Studio | Victor | � Em andamento |
+| Fase 5 | Validação Athena e partições | Adri | � Em andamento |
+| Fase 6 | Visualização gráfica (Athena notebook) | Adri | 🔜 A fazer |
+| Fase 7 | README + vídeo final | Adri | 🔜 A fazer |
 
 ---
 
@@ -115,4 +111,4 @@ Projeto em dupla:
 > Última atualização: 2025-08-04  
 > Autores: Victor & Adri  
 > Pós FIAP – Machine Learning Engineering  
-> **Status atual:** Fases 1-3 concluídas ✅ | Fases 4-5 em andamento 🟡 | **43% do projeto concluído**
+> **Status atual:** Fase 2 concluída ✅ | Fases 3-5 em andamento 🟡
