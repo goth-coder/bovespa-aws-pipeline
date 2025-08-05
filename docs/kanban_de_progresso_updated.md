@@ -61,7 +61,6 @@ Projeto em dupla:
 - ✅ [04/08] Estrutura base de queries Athena criada (queries/, views/) - por Adri
 - ✅ [04/08] Documentação de arquitetura AWS completa - por Adri
 - ✅ [04/08] Implementação e testes da Lambda function (12 testes funcionais) - por Adri executando tarefa Victor
-- ✅ [04/08] Teste local da Lambda: 339 ações coletadas + processamento Parquet + validação S3 - por Adri
 
 ---
 
