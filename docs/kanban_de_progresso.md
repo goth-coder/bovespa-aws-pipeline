@@ -11,7 +11,7 @@ Projeto em dupla:
 | Fase 1 | Arquitetura do pipeline | Victor + Adri | ✅ Concluído |
 | Fase 2 | Scraper B3 + Upload S3 | Victor | ✅ Concluído |
 | Fase 3 | Lambda trigger (job Glue) | Victor | ✅ Concluído |
-| Fase 4 | ETL no Glue Studio | Victor | 🟡 Em andamento |
+| Fase 4 | ETL no Glue Studio | Victor | ✅ Concluído |
 | Fase 5 | Validação Athena e partições | Adri | 🟡 Em andamento |
 | Fase 6 | Visualização gráfica (Athena notebook) | Adri | 🔜 A fazer |
 | Fase 7 | README + vídeo final | Adri | 🔜 A fazer |
