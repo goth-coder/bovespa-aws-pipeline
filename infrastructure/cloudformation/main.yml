@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'CloudFormation template para Pipeline Bovespa B3'
+Description: 'Pipeline Bovespa B3 - Infraestrutura completa AWS'
 
 Parameters:
   ProjectName:
@@ -12,42 +12,352 @@ Parameters:
     Default: 'dev'
     AllowedValues: ['dev', 'prod']
     Description: 'Ambiente de deploy'
+    
+  BucketName:
+    Type: String
+    Default: 'bovespa-pipeline-data-adri-victor'
+    Description: 'Nome do bucket S3 principal'
 
 Resources:
-  # S3 Buckets
-  RawDataBucket:
+  # ===== S3 BUCKETS =====
+  MainDataBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub '${ProjectName}-raw-data-${Environment}'
+      BucketName: !Ref BucketName
       VersioningConfiguration:
         Status: Enabled
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: s3:ObjectCreated:*
+            Function: !GetAtt TriggerLambda.Arn
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: prefix
+                    Value: dados/
+                  - Name: suffix
+                    Value: .parquet
       LifecycleConfiguration:
         Rules:
           - Id: DeleteOldVersions
             Status: Enabled
             NoncurrentVersionExpirationInDays: 30
-  
-  CuratedDataBucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: !Sub '${ProjectName}-curated-data-${Environment}'
-      VersioningConfiguration:
-        Status: Enabled
+          - Id: TransitionToIA
+            Status: Enabled
+            Transition:
+              StorageClass: STANDARD_IA
+              TransitionInDays: 30
 
-  # Lambda Function
-  ScrapingLambda:
+  # ===== IAM ROLES =====
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${ProjectName}-lambda-role-${Environment}'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess
+      Policies:
+        - PolicyName: S3Access
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:DeleteObject
+                  - s3:ListBucket
+                Resource:
+                  - !Sub '${MainDataBucket}/*'
+                  - !GetAtt MainDataBucket.Arn
+        - PolicyName: GlueAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - glue:StartJobRun
+                  - glue:GetJobRun
+                  - glue:GetJobRuns
+                  - glue:BatchStopJobRun
+                Resource: !Sub 'arn:aws:glue:${AWS::Region}:${AWS::AccountId}:job/${ProjectName}-etl-job-${Environment}'
+
+  GlueServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${ProjectName}-glue-role-${Environment}'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: glue.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+      Policies:
+        - PolicyName: GlueCatalogAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - glue:*
+                  - s3:GetBucketLocation
+                  - s3:ListBucket
+                  - s3:ListAllMyBuckets
+                  - s3:GetBucketAcl
+                Resource: '*'
+
+  AthenaServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${ProjectName}-athena-role-${Environment}'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: athena.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: AthenaAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetBucketLocation
+                  - s3:GetObject
+                  - s3:ListBucket
+                  - s3:ListBucketMultipartUploads
+                  - s3:ListMultipartUploadParts
+                  - s3:AbortMultipartUpload
+                  - s3:PutObject
+                Resource:
+                  - !GetAtt MainDataBucket.Arn
+                  - !Sub '${MainDataBucket}/*'
+                  - !Sub 'arn:aws:s3:::aws-athena-query-results-${AWS::AccountId}-${AWS::Region}'
+                  - !Sub 'arn:aws:s3:::aws-athena-query-results-${AWS::AccountId}-${AWS::Region}/*'
+              - Effect: Allow
+                Action:
+                  - glue:GetDatabase
+                  - glue:GetDatabases
+                  - glue:GetTable
+                  - glue:GetTables
+                  - glue:GetPartition
+                  - glue:GetPartitions
+                  - glue:CreateTable
+                  - glue:UpdateTable
+                  - glue:DeleteTable
+                Resource: '*'
+
+  # ===== LAMBDA FUNCTIONS =====
+  TriggerLambda:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Sub '${ProjectName}-scraping-${Environment}'
+      FunctionName: !Sub '${ProjectName}-trigger-${Environment}'
       Runtime: python3.9
-      Handler: trigger_scraping.lambda_handler
+      Handler: index.lambda_handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Timeout: 300
+      MemorySize: 512
+      Environment:
+        Variables:
+          GLUE_JOB_NAME: !Ref GlueETLJob
+          BOVESPA_S3_BUCKET: !Ref BucketName
       Code:
         ZipFile: |
-          # Código será carregado via deploy
+          import boto3
+          import json
+          import os
+          
           def lambda_handler(event, context):
-              return {'statusCode': 200}
-      Timeout: 900
-      MemorySize: 512
+              glue = boto3.client('glue')
+              job_name = os.environ['GLUE_JOB_NAME']
+              bucket_name = os.environ['BOVESPA_S3_BUCKET']
+              
+              try:
+                  response = glue.start_job_run(
+                      JobName=job_name,
+                      Arguments={
+                          '--BOVESPA_S3_BUCKET': bucket_name,
+                          '--job-language': 'python'
+                      }
+                  )
+                  
+                  return {
+                      'statusCode': 200,
+                      'body': json.dumps({
+                          'message': 'Glue job started successfully',
+                          'jobRunId': response['JobRunId']
+                      })
+                  }
+              except Exception as e:
+                  print(f"Error: {str(e)}")
+                  return {
+                      'statusCode': 500,
+                      'body': json.dumps({
+                          'error': str(e)
+                      })
+                  }
+
+  # Permissão para S3 invocar Lambda
+  LambdaInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref TriggerLambda
+      Action: lambda:InvokeFunction
+      Principal: s3.amazonaws.com
+      SourceArn: !GetAtt MainDataBucket.Arn
+
+  # ===== GLUE COMPONENTS =====
+  GlueDatabase:
+    Type: AWS::Glue::Database
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseInput:
+        Name: !Sub '${ProjectName}_database_${Environment}'
+        Description: 'Database para dados da Bovespa B3'
+
+  GlueETLJob:
+    Type: AWS::Glue::Job
+    Properties:
+      Name: !Sub '${ProjectName}-etl-job-${Environment}'
+      Role: !Ref GlueServiceRole
+      Command:
+        Name: glueetl
+        PythonVersion: '3'
+        ScriptLocation: !Sub 's3://${BucketName}/scripts/etl_job.py'
+      DefaultArguments:
+        '--job-language': 'python'
+        '--job-bookmark-option': 'job-bookmark-enable'
+        '--enable-metrics': 'true'
+        '--enable-continuous-cloudwatch-log': 'true'
+        '--BOVESPA_S3_BUCKET': !Ref BucketName
+      MaxRetries: 2
+      Timeout: 60
+      GlueVersion: '3.0'
+      MaxCapacity: 2
+
+  # ===== ATHENA COMPONENTS =====
+  AthenaWorkGroup:
+    Type: AWS::Athena::WorkGroup
+    Properties:
+      Name: !Sub '${ProjectName}-workgroup-${Environment}'
+      Description: 'WorkGroup para análises Bovespa'
+      State: ENABLED
+      WorkGroupConfiguration:
+        ResultConfiguration:
+          OutputLocation: !Sub 's3://aws-athena-query-results-${AWS::AccountId}-${AWS::Region}/'
+        EnforceWorkGroupConfiguration: true
+        PublishCloudWatchMetrics: true
+
+  # ===== EVENTBRIDGE RULE =====
+  ScheduledRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: !Sub '${ProjectName}-schedule-${Environment}'
+      Description: 'Trigger diário para pipeline Bovespa'
+      ScheduleExpression: 'cron(0 18 * * MON-FRI *)'  # 18:00 UTC, seg-sex
+      State: ENABLED
+      Targets:
+        - Arn: !GetAtt TriggerLambda.Arn
+          Id: !Sub '${ProjectName}ScheduleTarget'
+          Input: '{"source": "eventbridge", "trigger": "scheduled"}'
+
+  # Permissão para EventBridge invocar Lambda
+  PermissionForEventsToInvokeLambda:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref TriggerLambda
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt ScheduledRule.Arn
+
+  # ===== CLOUDWATCH ALARMS =====
+  LambdaErrorAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub '${ProjectName}-lambda-errors-${Environment}'
+      AlarmDescription: 'Alarme para erros na Lambda'
+      MetricName: Errors
+      Namespace: AWS/Lambda
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Dimensions:
+        - Name: FunctionName
+          Value: !Ref TriggerLambda
+
+  GlueJobErrorAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub '${ProjectName}-glue-errors-${Environment}'
+      AlarmDescription: 'Alarme para falhas no Glue Job'
+      MetricName: glue.driver.aggregate.numFailedTasks
+      Namespace: AWS/Glue
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Dimensions:
+        - Name: JobName
+          Value: !Ref GlueETLJob
+
+Outputs:
+  MainBucketName:
+    Description: 'Nome do bucket S3 principal'
+    Value: !Ref MainDataBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-MainBucket'
+
+  LambdaFunctionArn:
+    Description: 'ARN da função Lambda'
+    Value: !GetAtt TriggerLambda.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-LambdaArn'
+
+  GlueJobName:
+    Description: 'Nome do Glue Job'
+    Value: !Ref GlueETLJob
+    Export:
+      Name: !Sub '${AWS::StackName}-GlueJob'
+
+  GlueDatabaseName:
+    Description: 'Nome do database Glue'
+    Value: !Ref GlueDatabase
+    Export:
+      Name: !Sub '${AWS::StackName}-GlueDatabase'
+
+  AthenaWorkGroupName:
+    Description: 'Nome do WorkGroup Athena'
+    Value: !Ref AthenaWorkGroup
+    Export:
+      Name: !Sub '${AWS::StackName}-AthenaWorkGroup'
+
+  DataLakeLocation:
+    Description: 'Localização do Data Lake'
+    Value: !Sub 's3://${MainDataBucket}/dados/'
+    Export:
+      Name: !Sub '${AWS::StackName}-DataLakeLocation'
+
+  RefinedDataLocation:
+    Description: 'Localização dos dados refinados'
+    Value: !Sub 's3://${MainDataBucket}/refined/'
+    Export:
+      Name: !Sub '${AWS::StackName}-RefinedDataLocation'
 
   # EventBridge Rule
   DailyTrigger:
