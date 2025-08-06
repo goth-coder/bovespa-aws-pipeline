@@ -152,9 +152,7 @@ def process_and_upload_to_s3() -> Dict[str, Any]:
         logger.info("🔄 Iniciando processamento Parquet + S3...")
         
         # Usar bucket do ambiente
-        bucket_name = os.environ.get('BOVESPA_S3_BUCKET')
-        if not bucket_name:
-            raise Exception("BOVESPA_S3_BUCKET não configurado no ambiente")
+        bucket_name = os.environ.get('BOVESPA_S3_BUCKET', 'bovespa-pipeline-data-adri-victor')
         
         processor = B3ParquetProcessor(upload_to_s3=True)
         results = processor.process_all_json_files()

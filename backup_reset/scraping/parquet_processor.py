@@ -53,9 +53,7 @@ class B3ParquetProcessor:
         
         # Configurar S3 se habilitado
         if self.upload_to_s3:
-            self.s3_bucket = os.getenv('BOVESPA_S3_BUCKET')
-            if not self.s3_bucket:
-                raise ValueError("BOVESPA_S3_BUCKET não configurado no ambiente")
+            self.s3_bucket = os.getenv('BOVESPA_S3_BUCKET', 'bovespa-pipeline-data-adri-victor')
             try:
                 self.s3_client = boto3.client('s3')
                 logger.info(f"✅ Upload S3 habilitado para bucket: {self.s3_bucket}")

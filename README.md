@@ -4,7 +4,7 @@
 Este projeto tem como objetivo construir um **pipeline de dados batch** para ingestão, processamento e análise dos dados do pregão da **B3**, utilizando serviços da **AWS** (S3, Glue, Lambda, Athena).  
 O pipeline será responsável por realizar o **scraping** dos dados da B3, armazenar em um **Data Lake** no formato **Parquet**, processar via **AWS Glue** e disponibilizar para consulta no **AWS Athena**.
 
-**Status:** 🚧 Em desenvolvimento - Estrutura modular implementada
+**Status:** 🎉 Projeto Funcional - Pipeline completo operacional
 
 ---
 

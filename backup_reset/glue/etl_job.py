@@ -31,10 +31,8 @@ def main():
         print("Iniciando job ETL B3...")
         
         # Configurações do job
-        # Configuração via argumentos do Glue  
-        bucket_name = args.get('BOVESPA_S3_BUCKET', 'bovespa-pipeline-data-adri-victor')
-        input_path = f"s3://{bucket_name}/data_lake/"
-        output_path = f"s3://{bucket_name}/refined/"
+        input_path = "s3://bovespa-pipeline-data-adri-vic/data_lake/"
+        output_path = "s3://bovespa-pipeline-data-adri-vic/refined/"
         
         # 1. Ler dados brutos do S3
         print("Lendo dados do S3...")
