@@ -11,10 +11,10 @@ Projeto em dupla:
 | Fase 1 | Arquitetura do pipeline | Victor + Adri | ✅ Concluído |
 | Fase 2 | Scraper B3 + Upload S3 | Victor | ✅ Concluído |
 | Fase 3 | Lambda trigger (job Glue) | Victor | ✅ Concluído |
-| Fase 4 | ETL no Glue Studio | Victor | 🔜 A fazer |
-| Fase 5 | Validação Athena e partições | Adri | 🔜 A fazer |
+| Fase 4 | ETL no Glue Studio | Victor | � Em andamento |
+| Fase 5 | Validação Athena e partições | Adri | � Em andamento |
 | Fase 6 | Visualização gráfica (Athena notebook) | Adri | 🔜 A fazer |
-| Fase 7 | README + vídeo final | Adri | 🔜 A fazer |
+| Fase 7 | README + vídeo final | Adri | � Em andamento |
 
 ---
 
@@ -45,6 +45,12 @@ Projeto em dupla:
 ### 🔹 Adri (Pessoa B)
 #### 🟡 EM ANDAMENTO
 - 🟡 Queries Athena para análise de dados (tabelas criadas, pendente validação de resultados)
+- 🟡 Documentação final do projeto (README.md e INSTALACAO.md atualizados)
+
+#### ✅ CONCLUÍDO RECENTEMENTE
+- ✅ [05/08] Documentação completa atualizada (README.md + INSTALACAO.md) - por Adri
+- ✅ [05/08] Guia passo a passo de instalação e execução criado - por Adri
+- ✅ [05/08] Status das fases e métricas de performance documentadas - por Adri
 
 #### 🔜 A FAZER
 - [ ] Validar tabelas no Athena (conectar com dados do S3)

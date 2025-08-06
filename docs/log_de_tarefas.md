@@ -1,7 +1,36 @@
+z'```markdown
 z'# 📝 Log de Tarefas - Pipeline Bovespa
 
 **Projeto:** Tech Challenge – Pipeline Batch Bovespa  
 **Modo:** Desenvolvimento em Dupla  
+
+---
+
+## 📅 **05/08/2025**
+
+### 🕐 **14:00 - ✅ DOCUMENTAÇÃO COMPLETA ATUALIZADA**
+- **Responsável:** Adri (Agente B)
+- **Tarefa:** Atualização completa da documentação do projeto
+- **Descrição:** Revisão e atualização completa do README.md com passo a passo de instalação e estrutura atual
+- **Melhorias implementadas:**
+  - ✅ Estrutura do projeto 100% atualizada com todos os diretórios atuais
+  - ✅ Seção "Como Executar o Projeto" com passo a passo detalhado
+  - ✅ Configuração de credenciais AWS com exemplos práticos
+  - ✅ Status das fases atualizado (Fases 1-3 ✅ concluídas)
+  - ✅ Métricas de performance e troubleshooting completo
+  - ✅ Seção de arquitetura com diagrama mermaid
+  - ✅ Guia de contribuição e créditos atualizados
+- **Arquivos criados/modificados:**
+  - `README.md` (atualização completa - 396 linhas)
+  - `INSTALACAO.md` (criado - guia detalhado de setup)
+- **Decisões técnicas:**
+  - Manter foco na funcionalidade atual (Fases 1-3 funcionais)
+  - Incluir comandos práticos para cada etapa
+  - Documentar troubleshooting dos problemas mais comuns
+  - Criar guia separado de instalação para onboarding
+- **Impacto:** Documentação profissional completa, facilitando onboarding e manutenção
+- **Status:** ✅ Concluído
+- **Próximos passos:** Pronto para Athena (Fase 5) e deploy AWS
 
 ---
 
